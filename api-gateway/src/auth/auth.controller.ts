@@ -16,6 +16,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   async login() {
+    return 'oi';
     //return await this.authService.login();
   }
 }

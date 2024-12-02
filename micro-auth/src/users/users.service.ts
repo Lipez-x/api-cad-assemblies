@@ -34,4 +34,8 @@ export class UsersService {
       throw new RpcException(error.message);
     }
   }
+
+  async getUserByEmail(email: string) {
+    return await this.usersModel.findOne({ email });
+  }
 }

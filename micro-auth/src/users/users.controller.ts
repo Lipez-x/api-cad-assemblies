@@ -1,5 +1,11 @@
 import { Controller, Logger } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import {
+  Ctx,
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 import { RegisterUserPayload } from './interfaces/register-user.payload';
 import { UsersService } from './users.service';
 
@@ -32,6 +38,17 @@ export class UsersController {
       if (filterAckError) {
         await channel.ack(message);
       }
+    }
+  }
+
+  @MessagePattern('get-user')
+  async getUserByEmail(@Ctx() context: RmqContext, @Payload() email: string) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    try {
+      return await this.usersService.getUserByEmail(email);
+    } finally {
+      await channel.ack(message);
     }
   }
 }
