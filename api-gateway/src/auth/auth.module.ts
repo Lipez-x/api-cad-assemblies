@@ -3,9 +3,18 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ProxyrmqModule } from 'src/proxyrmq/proxyrmq.module';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ProxyrmqModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '24h' },
+    }),
+    ProxyrmqModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy],
 })
