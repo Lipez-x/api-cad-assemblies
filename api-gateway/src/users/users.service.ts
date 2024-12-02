@@ -8,8 +8,7 @@ export class UsersService {
     private readonly clientProxyCadAssemblies: ClientProxyCadAssemblies,
   ) {}
 
-  clientAdminBackend =
-    this.clientProxyCadAssemblies.getClientProxyAdminBackendInstance();
+  clientAuth = this.clientProxyCadAssemblies.getClientProxyAuthInstance();
 
   async register(registerUserDto: RegisterUserDto) {
     const { password, confirmPassword } = registerUserDto;
@@ -17,6 +16,6 @@ export class UsersService {
       throw new BadRequestException('Password was not confirmed correctly');
     }
 
-    this.clientAdminBackend.emit('register-user', registerUserDto);
+    this.clientAuth.emit('register-user', registerUserDto);
   }
 }
