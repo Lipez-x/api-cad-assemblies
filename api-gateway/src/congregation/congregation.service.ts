@@ -1,7 +1,9 @@
 import {
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { CreateCongregationDto } from './dtos/create-congregation.dto';
@@ -38,6 +40,9 @@ export class CongregationService {
       );
     } catch (error) {
       this.logger.error(error.message);
+      if (error.statusCode == HttpStatus.NOT_FOUND) {
+        throw new NotFoundException(error.message);
+      }
       throw new InternalServerErrorException(error.message);
     }
   }

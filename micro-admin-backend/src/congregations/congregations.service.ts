@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { UpdateCongregationPayload } from './interfaces/update-congregation.payload';
 import { CreateCongregationPayload } from './interfaces/create-congregation.payload';
 import { InjectModel } from '@nestjs/mongoose';
@@ -43,13 +43,16 @@ export class CongregationsService {
   }
 
   async findCongregationById(id: string) {
+    const congregation = await this.congregationsModel.findById(id).exec();
+
+    if (!congregation) {
+      throw new RpcException({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Congregation not found',
+      });
+    }
+
     try {
-      const congregation = await this.congregationsModel.findById(id).exec();
-
-      if (!congregation) {
-        throw new NotFoundException('Congregation not found');
-      }
-
       return congregation;
     } catch (error) {
       this.logger.error(error.message);
