@@ -1,4 +1,4 @@
-import { Schema } from '@nestjs/mongoose';
+import { Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 export class Address {
@@ -14,3 +14,5 @@ export class Congregation extends Document {
   address: Address;
   members: Array<string>;
 }
+
+export const CongregationsSchema = SchemaFactory.createForClass(Congregation);
