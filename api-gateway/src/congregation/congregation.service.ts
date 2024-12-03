@@ -16,7 +16,7 @@ export class CongregationService {
 
   private logger = new Logger(CongregationService.name);
 
-  private clientAdminBackend =
+  clientAdminBackend =
     this.clientProxyCadAssemblies.getClientProxyAdminBackendInstance();
 
   createCongregation(createCongregationPayload: CreateCongregationDto) {

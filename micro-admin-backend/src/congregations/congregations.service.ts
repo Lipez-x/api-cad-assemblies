@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { UpdateCongregationPayload } from './interfaces/update-congregation.payload';
 import { CreateCongregationPayload } from './interfaces/create-congregation.payload';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Congregation } from './interfaces/congregations.schema';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class CongregationsService {
@@ -12,19 +13,71 @@ export class CongregationsService {
     private readonly congregationsModel: Model<Congregation>,
   ) {}
 
-  createCongregation(createCongregationPayload: CreateCongregationPayload) {
-    throw new Error('Method not implemented.');
+  private logger = new Logger(CongregationsService.name);
+
+  async createCongregation(
+    createCongregationPayload: CreateCongregationPayload,
+  ) {
+    const { name, leader, address } = createCongregationPayload;
+    try {
+      const createdCongregation = new this.congregationsModel({
+        name,
+        leader,
+        address,
+      });
+
+      return createdCongregation.save();
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
-  findCongregationById(id: string) {
-    throw new Error('Method not implemented.');
+
+  async findAllCongregations() {
+    try {
+      return await this.congregationsModel.find().exec();
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
-  findAllCongregations() {
-    throw new Error('Method not implemented.');
+
+  async findCongregationById(id: string) {
+    try {
+      const congregation = await this.congregationsModel.findById(id).exec();
+
+      if (!congregation) {
+        throw new NotFoundException('Congregation not found');
+      }
+
+      return congregation;
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
-  updateCongregation(updateCongregationPayload: UpdateCongregationPayload) {
-    throw new Error('Method not implemented.');
+
+  async updateCongregation(
+    updateCongregationPayload: UpdateCongregationPayload,
+  ) {
+    try {
+      const { id, updateCongregationDto } = updateCongregationPayload;
+
+      await this.congregationsModel.findByIdAndUpdate(id, {
+        $set: updateCongregationDto,
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
-  deleteCongregation(id: string) {
-    throw new Error('Method not implemented.');
+
+  async deleteCongregation(id: string) {
+    try {
+      await this.congregationsModel.findByIdAndDelete(id).exec();
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
 }

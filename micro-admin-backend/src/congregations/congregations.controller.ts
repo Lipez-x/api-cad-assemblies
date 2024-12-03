@@ -47,6 +47,7 @@ export class CongregationsController {
   async getCongregations(@Ctx() context: RmqContext, @Payload() id: string) {
     const channel = context.getChannelRef();
     const message = context.getMessage();
+
     try {
       if (id) {
         return await this.congregationsService.findCongregationById(id);
