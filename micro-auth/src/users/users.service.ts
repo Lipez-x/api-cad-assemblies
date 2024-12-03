@@ -16,15 +16,15 @@ export class UsersService {
   ) {}
 
   async register(registerUserPayload: RegisterUserPayload) {
-    const { login, email, password } = registerUserPayload;
+    const { email, role, password } = registerUserPayload;
 
     const salt = await bcrypt.genSalt(16);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     try {
       const createUser = new this.usersModel({
-        login,
         email,
+        role,
         password: hashedPassword,
       });
 

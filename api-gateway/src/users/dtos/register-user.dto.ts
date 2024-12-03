@@ -2,8 +2,6 @@ import { IsEmail, IsEnum, IsString, Matches } from 'class-validator';
 import { UserRole } from '../enums/user-role.enum';
 
 export class RegisterUserDto {
-  @IsString()
-  login: string;
   @IsEmail()
   email: string;
   @IsEnum(UserRole)
