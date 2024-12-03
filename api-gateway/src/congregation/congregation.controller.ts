@@ -38,19 +38,22 @@ export class CongregationController {
 
   @Put('/:id')
   @UsePipes(ValidationPipe)
-  updateCongregation(
+  async updateCongregation(
     @Param('id') id: string,
     @Body() updateCongregationDto: updateCongregationDto,
   ) {
     this.logger.log(
       `Congregation: ${id}, update body: ${JSON.stringify(updateCongregationDto)}`,
     );
-    this.congregationService.updateCongregation(id, updateCongregationDto);
+    await this.congregationService.updateCongregation(
+      id,
+      updateCongregationDto,
+    );
   }
 
   @Delete('/:id')
-  deleteCongregation(@Param('id') id: string) {
+  async deleteCongregation(@Param('id') id: string) {
     this.logger.log(`Delete Congregation: ${id}`);
-    this.congregationService.deleteCongregation(id);
+    await this.congregationService.deleteCongregation(id);
   }
 }

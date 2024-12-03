@@ -50,7 +50,7 @@ export class CongregationsController {
 
     try {
       if (id) {
-        console.log(await this.congregationsService.findCongregationById(id));
+        return await this.congregationsService.findCongregationById(id);
       } else {
         return await this.congregationsService.findAllCongregations();
       }

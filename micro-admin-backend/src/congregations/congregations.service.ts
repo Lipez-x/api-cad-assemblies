@@ -43,16 +43,8 @@ export class CongregationsService {
   }
 
   async findCongregationById(id: string) {
-    const congregation = await this.congregationsModel.findById(id).exec();
-
-    if (!congregation) {
-      throw new RpcException({
-        statusCode: HttpStatus.NOT_FOUND,
-        message: 'Congregation not found',
-      });
-    }
-
     try {
+      const congregation = await this.congregationsModel.findById(id).exec();
       return congregation;
     } catch (error) {
       this.logger.error(error.message);

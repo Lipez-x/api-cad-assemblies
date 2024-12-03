@@ -34,20 +34,33 @@ export class CongregationService {
   }
 
   async getCongregations(id: string) {
+    const congregation = await lastValueFrom(
+      this.clientAdminBackend.send('get-congregations', id ? id : ''),
+    );
+
+    if (!congregation) {
+      throw new NotFoundException('Congregation not found');
+    }
+
     try {
-      return await lastValueFrom(
-        this.clientAdminBackend.send('get-congregations', id ? id : ''),
-      );
+      return congregation;
     } catch (error) {
       this.logger.error(error.message);
-      if (error.statusCode == HttpStatus.NOT_FOUND) {
-        throw new NotFoundException(error.message);
-      }
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  updateCongregation(id: string, updateCongregationDto: updateCongregationDto) {
+  async updateCongregation(
+    id: string,
+    updateCongregationDto: updateCongregationDto,
+  ) {
+    const congregation = await lastValueFrom(
+      this.clientAdminBackend.send('get-congregations', id),
+    );
+
+    if (!congregation) {
+      throw new NotFoundException('Congregation not found');
+    }
     try {
       this.clientAdminBackend.emit('update-congregation', {
         id,
@@ -59,7 +72,14 @@ export class CongregationService {
     }
   }
 
-  deleteCongregation(id: string) {
+  async deleteCongregation(id: string) {
+    const congregation = await lastValueFrom(
+      this.clientAdminBackend.send('get-congregations', id),
+    );
+
+    if (!congregation) {
+      throw new NotFoundException('Congregation not found');
+    }
     try {
       this.clientAdminBackend.emit('delete-congregation', id);
     } catch (error) {
