@@ -6,7 +6,10 @@ import {
   Logger,
   Param,
   Post,
+  Put,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CongregationService } from './congregation.service';
 import { CreateCongregationDto } from './dtos/create-congregation.dto';
@@ -19,16 +22,13 @@ export class CongregationController {
   private logger = new Logger(CongregationController.name);
 
   @Post()
-  async createCongregation(
-    @Body() createCongregationPayload: CreateCongregationDto,
-  ) {
+  @UsePipes(ValidationPipe)
+  createCongregation(@Body() createCongregationPayload: CreateCongregationDto) {
     this.logger.log(
       `Congregation: ${JSON.stringify(createCongregationPayload)}`,
     );
 
-    return await this.congregationService.createCongregation(
-      createCongregationPayload,
-    );
+    this.congregationService.createCongregation(createCongregationPayload);
   }
 
   @Get()
@@ -36,23 +36,21 @@ export class CongregationController {
     return await this.congregationService.getCongregations(id);
   }
 
-  @Post('/:id')
-  async updateCongregation(
+  @Put('/:id')
+  @UsePipes(ValidationPipe)
+  updateCongregation(
     @Param('id') id: string,
     @Body() updateCongregationDto: updateCongregationDto,
   ) {
     this.logger.log(
       `Congregation: ${id}, update body: ${JSON.stringify(updateCongregationDto)}`,
     );
-    await this.congregationService.updateCongregation(
-      id,
-      updateCongregationDto,
-    );
+    this.congregationService.updateCongregation(id, updateCongregationDto);
   }
 
   @Delete('/:id')
-  async deleteCongregation(@Param('id') id: string) {
+  deleteCongregation(@Param('id') id: string) {
     this.logger.log(`Delete Congregation: ${id}`);
-    await this.congregationService.deleteCongregation(id);
+    this.congregationService.deleteCongregation(id);
   }
 }
