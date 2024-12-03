@@ -1,5 +1,10 @@
 import { IsObject, IsOptional, IsString } from 'class-validator';
 
+class Address {
+  street: string;
+  number: string | number;
+  neighborhood: string;
+}
 export class updateCongregationDto {
   @IsString()
   @IsOptional()
@@ -10,10 +15,4 @@ export class updateCongregationDto {
   @IsObject()
   @IsOptional()
   address: Address;
-}
-
-class Address {
-  street: string;
-  number: string | number;
-  neighborhood: string;
 }

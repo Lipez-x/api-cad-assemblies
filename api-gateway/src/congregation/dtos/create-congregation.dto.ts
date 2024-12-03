@@ -1,5 +1,10 @@
 import { IsObject, IsString } from 'class-validator';
 
+class Address {
+  street: string;
+  number: string | number;
+  neighborhood: string;
+}
 export class CreateCongregationDto {
   @IsString()
   name: string;
@@ -7,10 +12,4 @@ export class CreateCongregationDto {
   leader: string;
   @IsObject()
   address: Address;
-}
-
-class Address {
-  street: string;
-  number: string | number;
-  neighborhood: string;
 }
