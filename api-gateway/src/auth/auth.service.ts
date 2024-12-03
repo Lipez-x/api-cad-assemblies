@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from './interfaces/user.interface';
 import { UserPayload } from './interfaces/user.payload';
 import { JwtService } from '@nestjs/jwt';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -28,9 +29,9 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user: User = await this.clientAuth
-      .send('get-user', email)
-      .toPromise();
+    const user: User = await lastValueFrom(
+      this.clientAuth.send('get-user', email),
+    );
 
     if (user) {
       const isValidPassword = await bcrypt.compare(password, user.password);
