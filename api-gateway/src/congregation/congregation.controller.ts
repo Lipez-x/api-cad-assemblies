@@ -14,7 +14,10 @@ import {
 import { CongregationService } from './congregation.service';
 import { CreateCongregationDto } from './dtos/create-congregation.dto';
 import { updateCongregationDto } from './dtos/update-congregation.dto';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from 'src/users/enums/user-role.enum';
 
+@Roles(UserRole.ADMIN)
 @Controller('api/v1/congregation')
 export class CongregationController {
   constructor(private readonly congregationService: CongregationService) {}
