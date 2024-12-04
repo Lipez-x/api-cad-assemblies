@@ -9,6 +9,7 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { CongregationModule } from './congregation/congregation.module';
 import { RolesGuard } from './common/guards/roles.guard';
+import { DepartmentModule } from './department/department.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     ProxyrmqModule,
     AuthModule,
     CongregationModule,
+    DepartmentModule,
   ],
   controllers: [AppController],
   providers: [
