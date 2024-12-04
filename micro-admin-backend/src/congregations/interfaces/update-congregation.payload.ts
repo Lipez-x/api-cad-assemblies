@@ -1,4 +1,4 @@
-import { Address } from './congregations.schema';
+import { Address } from '../schemas/congregations.schema';
 
 export interface UpdateCongregationPayload {
   id: string;

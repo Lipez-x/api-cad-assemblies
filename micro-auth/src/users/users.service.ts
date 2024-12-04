@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RegisterUserPayload } from './interfaces/register-user.payload';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Users } from './interfaces/users.schema';
+import { Users } from './schemas/users.schema';
 import * as bcrypt from 'bcrypt';
 import { RpcException } from '@nestjs/microservices';
 import { verify } from 'crypto';

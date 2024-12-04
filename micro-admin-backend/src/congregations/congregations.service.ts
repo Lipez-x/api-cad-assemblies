@@ -3,7 +3,7 @@ import { UpdateCongregationPayload } from './interfaces/update-congregation.payl
 import { CreateCongregationPayload } from './interfaces/create-congregation.payload';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Congregation } from './interfaces/congregations.schema';
+import { Congregation } from './schemas/congregations.schema';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
