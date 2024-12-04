@@ -18,24 +18,12 @@ export class CongregationsService {
   async createCongregation(
     createCongregationPayload: CreateCongregationPayload,
   ) {
-    const { name, leader, address } = createCongregationPayload;
     try {
-      const createdCongregation = new this.congregationsModel({
-        name,
-        leader,
-        address,
-      });
+      const createdCongregation = new this.congregationsModel(
+        createCongregationPayload,
+      );
 
-      return createdCongregation.save();
-    } catch (error) {
-      this.logger.error(error.message);
-      throw new RpcException(error.message);
-    }
-  }
-
-  async findAllCongregations() {
-    try {
-      return await this.congregationsModel.find().exec();
+      await createdCongregation.save();
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
@@ -46,6 +34,15 @@ export class CongregationsService {
     try {
       const congregation = await this.congregationsModel.findById(id).exec();
       return congregation;
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
+  }
+
+  async findAllCongregations() {
+    try {
+      return await this.congregationsModel.find().exec();
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
