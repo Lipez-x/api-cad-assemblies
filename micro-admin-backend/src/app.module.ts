@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CongregationsModule } from './congregations/congregations.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DepartmentsModule } from './departments/departments.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.u30gd.mongodb.net/cadaadmbackend?retryWrites=true&w=majority&appName=Cluster0`,
     ),
     CongregationsModule,
+    DepartmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
