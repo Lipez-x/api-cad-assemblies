@@ -5,11 +5,12 @@ import { UsersModule } from './users/users.module';
 import { ProxyrmqModule } from './proxyrmq/proxyrmq.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { CongregationModule } from './congregation/congregation.module';
 import { DepartmentModule } from './department/department.module';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { MembersModule } from './members/members.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
     AuthModule,
     CongregationModule,
     DepartmentModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [

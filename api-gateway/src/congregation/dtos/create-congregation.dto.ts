@@ -1,10 +1,6 @@
 import { IsObject, IsString } from 'class-validator';
+import { Address } from 'src/common/interfaces/address.interface';
 
-class Address {
-  street: string;
-  number: string | number;
-  neighborhood: string;
-}
 export class CreateCongregationDto {
   @IsString()
   name: string;
