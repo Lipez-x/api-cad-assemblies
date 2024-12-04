@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Logger,
   Post,
   UsePipes,
   ValidationPipe,
@@ -12,7 +13,11 @@ import { CreateMemberDto } from './dtos/create-member.dto';
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
+  private logger = new Logger(MembersController.name);
+
   @Post()
   @UsePipes(ValidationPipe)
-  createMember(@Body() createMemberDto: CreateMemberDto) {}
+  createMember(@Body() createMemberDto: CreateMemberDto) {
+    this.logger.log(`Member: ${JSON.stringify(createMemberDto)}`);
+  }
 }

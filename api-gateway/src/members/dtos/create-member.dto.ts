@@ -29,8 +29,8 @@ export class CreateMemberDto {
   @IsDateString()
   birthDate: Date;
 
-  @IsDateString()
-  birthPlace: Date;
+  @IsString()
+  birthPlace: string;
 
   @IsString()
   gender: string;

@@ -16,7 +16,7 @@ export class CreateEcclesiasticalDataDto {
   @IsObject()
   position: Position;
 
-  @IsNotEmpty()
+  @IsOptional()
   department: Department;
 
   @IsDateString()
