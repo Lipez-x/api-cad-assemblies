@@ -8,6 +8,7 @@ import { RpcException } from '@nestjs/microservices';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { lastValueFrom } from 'rxjs';
 import { Congregation } from './interfaces/congregation.interface';
+import { Department } from './interfaces/department.interface';
 
 @Injectable()
 export class MembersService {
@@ -40,6 +41,18 @@ export class MembersService {
         id: congregation,
         updateCongregationDto: existsCongregation,
       });
+
+      if (department) {
+        const existsDepartments: Department = await lastValueFrom(
+          this.clientAdminBackend.send('get-departments', department),
+        );
+
+        existsDepartments.members.push(createdMember);
+        this.clientAdminBackend.emit('update-department', {
+          id: department,
+          updateDepartmentDto: existsDepartments,
+        });
+      }
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
