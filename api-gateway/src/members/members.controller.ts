@@ -26,9 +26,9 @@ export class MembersController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createMember(@Body() createMemberDto: CreateMemberDto) {
+  async createMember(@Body() createMemberDto: CreateMemberDto) {
     this.logger.log(`Member: ${JSON.stringify(createMemberDto)}`);
-    this.membersService.createMember(createMemberDto);
+    await this.membersService.createMember(createMemberDto);
   }
 
   @Get()

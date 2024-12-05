@@ -18,9 +18,32 @@ export class MembersService {
   private clientMembers =
     this.clientProxyCadAssemblies.getClientMembersInstance();
 
+  private clientAdminBackend =
+    this.clientProxyCadAssemblies.getClientProxyAdminBackendInstance();
+
   private logger = new Logger(MembersService.name);
 
   async createMember(createMemberDto: CreateMemberDto) {
+    const { congregation, department } = createMemberDto.ecclesiasticalData;
+
+    const existsCongregation = await lastValueFrom(
+      this.clientAdminBackend.send('get-congregations', congregation),
+    );
+
+    if (!existsCongregation) {
+      throw new NotFoundException('Congregation not found');
+    }
+
+    if (department) {
+      const existsDepartments = await lastValueFrom(
+        this.clientAdminBackend.send('get-departments', department),
+      );
+
+      if (!existsDepartments) {
+        throw new NotFoundException('Department not found');
+      }
+    }
+
     try {
       this.clientMembers.emit('create-member', createMemberDto);
     } catch (error) {

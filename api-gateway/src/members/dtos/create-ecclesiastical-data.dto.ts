@@ -8,7 +8,6 @@ import {
   IsString,
 } from 'class-validator';
 import { Position } from '../../common/interfaces/position.dto';
-
 import { ReceivingType } from '../enums/receiving-type';
 
 export class CreateEcclesiasticalDataDto {
@@ -35,11 +34,4 @@ export class CreateEcclesiasticalDataDto {
 
   @IsDateString()
   receivingDate: Date;
-
-  @IsBoolean()
-  baptizedHolySpirit: boolean;
-
-  @IsDateString()
-  @IsOptional()
-  baptizedHolySpiritDate: Date;
 }
