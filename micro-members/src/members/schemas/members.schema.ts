@@ -9,10 +9,10 @@ export class Members extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   rg: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   cpf: string;
 
   @Prop({ required: true })
