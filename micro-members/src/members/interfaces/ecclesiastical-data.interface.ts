@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { Position } from './position.dto';
 
 export interface EcclesiasticalData {
@@ -6,7 +5,7 @@ export interface EcclesiasticalData {
   department: string;
   confessionDate: Date;
   baptismDate: Date;
-  congregation: mongoose.Schema.Types.ObjectId;
+  congregation: string;
   pastorName: string;
   receivingType: string;
   receivingDate: Date;
