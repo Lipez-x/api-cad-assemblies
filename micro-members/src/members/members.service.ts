@@ -22,37 +22,43 @@ export class MembersService {
 
   private logger = new Logger(MembersService.name);
 
+  async addMemberToGroupings(
+    congregation: string,
+    department: string,
+    createdMember: Members,
+  ) {
+    const existsCongregation: Congregation = await lastValueFrom(
+      this.clientAdminBackend.send('get-congregations', congregation),
+    );
+
+    existsCongregation.members.push(createdMember.id);
+
+    if (department) {
+      const existsDepartments: Department = await lastValueFrom(
+        this.clientAdminBackend.send('get-departments', department),
+      );
+
+      existsDepartments.members.push(createdMember);
+      this.clientAdminBackend.emit('update-congregation', {
+        id: congregation,
+        updateCongregationDto: existsCongregation,
+      });
+      this.clientAdminBackend.emit('update-department', {
+        id: department,
+        updateDepartmentDto: existsDepartments,
+      });
+    }
+  }
+
   async createMember(createMemberPayload: CreateMemberPayload) {
     try {
       const { congregation, department } =
         createMemberPayload.ecclesiasticalData;
 
-      const existsCongregation: Congregation = await lastValueFrom(
-        this.clientAdminBackend.send('get-congregations', congregation),
-      );
-
       const createdMember = new this.membersModel(createMemberPayload);
-
       await createdMember.save();
 
-      existsCongregation.members.push(createdMember.id);
-
-      this.clientAdminBackend.emit('update-congregation', {
-        id: congregation,
-        updateCongregationDto: existsCongregation,
-      });
-
-      if (department) {
-        const existsDepartments: Department = await lastValueFrom(
-          this.clientAdminBackend.send('get-departments', department),
-        );
-
-        existsDepartments.members.push(createdMember);
-        this.clientAdminBackend.emit('update-department', {
-          id: department,
-          updateDepartmentDto: existsDepartments,
-        });
-      }
+      await this.addMemberToGroupings(congregation, department, createdMember);
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
