@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export class Address {
   street: string;
@@ -16,7 +16,12 @@ export class Congregation extends Document {
   @Prop()
   address: Address;
   @Prop()
-  members: Array<string>;
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId;
+      ref: 'Members';
+    },
+  ];
 }
 
 export const CongregationsSchema = SchemaFactory.createForClass(Congregation);
