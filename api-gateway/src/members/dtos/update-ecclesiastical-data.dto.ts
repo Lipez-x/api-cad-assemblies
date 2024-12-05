@@ -32,12 +32,4 @@ export class UpdateEcclesiasticalDataDto {
   @IsString()
   @IsOptional()
   pastorName: string;
-
-  @IsBoolean()
-  @IsOptional()
-  baptizedHolySpirit: boolean;
-
-  @IsDateString()
-  @IsOptional()
-  baptizedHolySpiritDate: Date;
 }

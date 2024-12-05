@@ -5,13 +5,15 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { CivilStatus } from '../enums/civil-status.enum';
 import { MemberStatus } from '../enums/member-status.dto';
 import { Address } from 'cluster';
 import { UpdateEcclesiasticalDataDto } from './update-ecclesiastical-data.dto';
+import { Type } from 'class-transformer';
 
-export class CreateMemberDto {
+export class UpdateMemberDto {
   @IsString()
   @IsOptional()
   name: string;
@@ -21,15 +23,19 @@ export class CreateMemberDto {
   address: Address;
 
   @IsString()
+  @IsOptional()
   phoneNumber: string;
 
   @IsString()
+  @IsOptional()
   scholarity: string;
 
   @IsString()
+  @IsOptional()
   profession: string;
 
   @IsEnum(CivilStatus)
+  @IsOptional()
   civilStatus: string;
 
   @IsString()
@@ -48,10 +54,8 @@ export class CreateMemberDto {
   @IsOptional()
   weddingDate: Date;
 
-  @IsEnum(MemberStatus)
-  status: string;
-
-  @IsObject()
+  @ValidateNested()
+  @Type(() => UpdateEcclesiasticalDataDto)
   @IsOptional()
   ecclesiasticalData: UpdateEcclesiasticalDataDto;
 }
