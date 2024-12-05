@@ -34,4 +34,16 @@ export class ClientProxyCadAssemblies {
       },
     });
   }
+
+  getClientMembersInstance(): ClientProxy {
+    return ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [
+          `amqp://${this.RMQ_USER}:${this.RMQ_PASSWORD}@${this.RMQ_ADDRESS}/cadassemblies`,
+        ],
+        queue: 'members',
+      },
+    });
+  }
 }
