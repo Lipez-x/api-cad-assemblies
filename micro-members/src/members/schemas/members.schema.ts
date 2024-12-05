@@ -1,8 +1,10 @@
 import { Document } from 'mongoose';
 import { Address } from 'cluster';
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { EcclesiasticalData } from '../interfaces/interfaces/ecclesiastical-data.interface';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { EcclesiasticalDataSchema } from './ecclesiastical-data.schema';
+import { EcclesiasticalData } from '../interfaces/ecclesiastical-data.interface';
+
+@Schema({ timestamps: true, collection: 'members' })
 export class Members extends Document {
   @Prop({ required: true })
   name: string;

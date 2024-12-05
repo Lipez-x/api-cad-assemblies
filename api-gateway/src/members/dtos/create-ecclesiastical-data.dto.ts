@@ -8,8 +8,7 @@ import {
   IsString,
 } from 'class-validator';
 import { Position } from '../../common/interfaces/position.dto';
-import { Department } from 'src/common/interfaces/department.interface';
-import { Congregation } from 'src/common/interfaces/congregation.interface';
+
 import { ReceivingType } from '../enums/receiving-type';
 
 export class CreateEcclesiasticalDataDto {
@@ -17,7 +16,7 @@ export class CreateEcclesiasticalDataDto {
   position: Position;
 
   @IsOptional()
-  department: Department;
+  department: string;
 
   @IsDateString()
   confessionDate: Date;
@@ -26,7 +25,7 @@ export class CreateEcclesiasticalDataDto {
   baptismDate: Date;
 
   @IsNotEmpty()
-  congregation: Congregation;
+  congregation: string;
 
   @IsString()
   pastorName: string;

@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
-import { Position } from '../interfaces/interfaces/position.dto';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Position } from '../interfaces/position.dto';
 
 @Schema({ _id: false })
 export class EcclesiasticalData {
-  @Prop({ required: true })
+  @Prop()
   position: Position;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Departments' })
   department: string;
 
-  @Prop({ required: true })
+  @Prop()
   confessionDate: Date;
 
-  @Prop({ required: true })
+  @Prop()
   baptismDate: Date;
 
   @Prop({
@@ -23,20 +23,20 @@ export class EcclesiasticalData {
   })
   congregation: string;
 
-  @Prop({ required: true })
+  @Prop()
   pastorName: string;
 
-  @Prop({ required: true })
+  @Prop()
   receivingType: string;
 
-  @Prop({ required: true })
+  @Prop()
   receivingDate: Date;
 
   @Prop()
-  baptizedHolySpirit: boolean;
+  baptizedHolySpirit?: boolean;
 
   @Prop()
-  baptizedHolySpiritDate: Date;
+  baptizedHolySpiritDate?: Date;
 }
 
 export const EcclesiasticalDataSchema =
