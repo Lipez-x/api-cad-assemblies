@@ -5,24 +5,41 @@ import { Members } from './schemas/members.schema';
 import { CreateMemberPayload } from './interfaces/create-member-payload.interface';
 import { UpdateMemberPayload } from './interfaces/update-member.payload';
 import { RpcException } from '@nestjs/microservices';
+import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
+import { lastValueFrom } from 'rxjs';
+import { Congregation } from './interfaces/congregation.interface';
 
 @Injectable()
 export class MembersService {
   constructor(
     @InjectModel('Members') private readonly membersModel: Model<Members>,
+    private readonly clientProxyCadAssemblies: ClientProxyCadAssemblies,
   ) {}
+
+  private clientAdminBackend =
+    this.clientProxyCadAssemblies.getClientProxyAdminBackendInstance();
 
   private logger = new Logger(MembersService.name);
 
   async createMember(createMemberPayload: CreateMemberPayload) {
     try {
-      console.log(createMemberPayload);
+      const { congregation, department } =
+        createMemberPayload.ecclesiasticalData;
+
+      const existsCongregation: Congregation = await lastValueFrom(
+        this.clientAdminBackend.send('get-congregations', congregation),
+      );
 
       const createdMember = new this.membersModel(createMemberPayload);
 
-      console.log(createdMember);
-
       await createdMember.save();
+
+      existsCongregation.members.push(createdMember.id);
+
+      this.clientAdminBackend.emit('update-congregation', {
+        id: congregation,
+        updateCongregationDto: existsCongregation,
+      });
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
