@@ -131,15 +131,20 @@ export class MembersService {
     try {
       const { id, updateMemberDto } = updateMemberPayload;
 
-      const member = await lastValueFrom(
-        this.clientMembers.send('get-members', id),
-      );
+      const member = await this.membersModel.findById(id);
+
+      const updatedMemberData = {
+        ...member,
+        ...updateMemberDto,
+        ecclesiasticalData: {
+          ...member.ecclesiasticalData,
+          ...updateMemberDto.ecclesiasticalData,
+        },
+      };
 
       await this.membersModel.findByIdAndUpdate(id, {
-        $set: updateMemberDto,
+        $set: updatedMemberData,
       });
-
-      console.log(updateMemberDto.ecclesiasticalData.congregation);
 
       if (updateMemberDto.ecclesiasticalData.congregation) {
         await this.addMemberToCongregation(
