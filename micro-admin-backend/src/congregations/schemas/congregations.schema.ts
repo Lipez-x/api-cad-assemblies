@@ -15,13 +15,8 @@ export class Congregation extends Document {
   leader: string;
   @Prop()
   address: Address;
-  @Prop()
-  members: [
-    {
-      type: mongoose.Schema.Types.ObjectId;
-      ref: 'Members';
-    },
-  ];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Members' }] })
+  members: mongoose.Types.ObjectId[];
 }
 
 export const CongregationsSchema = SchemaFactory.createForClass(Congregation);

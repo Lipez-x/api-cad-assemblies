@@ -71,7 +71,7 @@ export class CongregationsController {
       await this.congregationsService.updateCongregation(
         updateCongregationPayload,
       );
-      await channel.ack(message);
+      return await channel.ack(message);
     } catch (error) {
       this.logger.error(error.message);
       const filterAckError = ackErrors.filter((ackError) =>

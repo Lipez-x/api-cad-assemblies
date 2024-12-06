@@ -7,13 +7,8 @@ export class Departments extends Document {
   name: string;
   @Prop()
   leader: string;
-  @Prop()
-  members: [
-    {
-      type: mongoose.Schema.Types.ObjectId;
-      ref: 'Members';
-    },
-  ];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Members' }] })
+  members: mongoose.Types.ObjectId[];
 }
 
 export const DepartmentsSchema = SchemaFactory.createForClass(Departments);
