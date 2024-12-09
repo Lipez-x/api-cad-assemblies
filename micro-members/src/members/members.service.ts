@@ -17,75 +17,32 @@ export class MembersService {
     private readonly clientProxyCadAssemblies: ClientProxyCadAssemblies,
   ) {}
 
-  private clientMembers =
-    this.clientProxyCadAssemblies.getClientMembersInstance();
-
   private clientAdminBackend =
     this.clientProxyCadAssemblies.getClientProxyAdminBackendInstance();
 
   private logger = new Logger(MembersService.name);
 
   async addMemberToDepartment(department: string, member: Members) {
-    const membersDepartment: Department = await lastValueFrom(
-      this.clientAdminBackend.send(
-        'get-departments',
-        member.ecclesiasticalData.department,
-      ),
-    );
-    const existsDepartments: Department = await lastValueFrom(
-      this.clientAdminBackend.send('get-departments', department),
-    );
+    this.clientAdminBackend.emit('remove-department-member', {
+      id: member.ecclesiasticalData.department,
+      memberId: member._id,
+    });
 
-    if (existsDepartments._id !== membersDepartment._id) {
-      const memberIndex = membersDepartment.members.findIndex(
-        (i) => i == member._id,
-      );
-
-      if (memberIndex !== -1) {
-        membersDepartment.members.splice(memberIndex, 1);
-        this.clientAdminBackend.emit('update-department', {
-          id: member.ecclesiasticalData.department,
-          updateDepartmentDto: membersDepartment,
-        });
-      }
-    }
-    existsDepartments.members.push(member);
-    this.clientAdminBackend.emit('update-department', {
+    this.clientAdminBackend.emit('add-department-member', {
       id: department,
-      updateDepartmentDto: existsDepartments,
+      memberId: member._id,
     });
   }
 
   async addMemberToCongregation(congregation: string, member: Members) {
-    const memberCongregation: Congregation = await lastValueFrom(
-      this.clientAdminBackend.send(
-        'get-congregations',
-        member.ecclesiasticalData.congregation,
-      ),
-    );
+    this.clientAdminBackend.emit('remove-congregation-member', {
+      id: member.ecclesiasticalData.congregation,
+      memberId: member._id,
+    });
 
-    const existsCongregation: Congregation = await lastValueFrom(
-      this.clientAdminBackend.send('get-congregations', congregation),
-    );
-
-    if (existsCongregation._id !== memberCongregation._id) {
-      const memberIndex = memberCongregation.members.findIndex(
-        (i) => i == member._id,
-      );
-
-      if (memberIndex !== -1) {
-        memberCongregation.members.splice(memberIndex, 1);
-        this.clientAdminBackend.emit('update-congregation', {
-          id: member.ecclesiasticalData.congregation,
-          updateCongregationDto: memberCongregation,
-        });
-      }
-    }
-
-    existsCongregation.members.push(member);
-    this.clientAdminBackend.emit('update-congregation', {
+    this.clientAdminBackend.emit('add-congregation-member', {
       id: congregation,
-      updateCongregationDto: existsCongregation,
+      memberId: member._id,
     });
   }
 
@@ -133,6 +90,26 @@ export class MembersService {
 
       const member = await this.membersModel.findById(id);
 
+      if (updateMemberDto.ecclesiasticalData.congregation) {
+        await this.addMemberToCongregation(
+          updateMemberDto.ecclesiasticalData.congregation,
+          member,
+        );
+
+        member.ecclesiasticalData.congregation =
+          updateMemberDto.ecclesiasticalData.congregation;
+      }
+
+      if (updateMemberDto.ecclesiasticalData.department) {
+        await this.addMemberToDepartment(
+          updateMemberDto.ecclesiasticalData.department,
+          member,
+        );
+
+        member.ecclesiasticalData.department =
+          updateMemberDto.ecclesiasticalData.department;
+      }
+
       const updatedMemberData = {
         ...member,
         ...updateMemberDto,
@@ -141,23 +118,9 @@ export class MembersService {
           ...updateMemberDto.ecclesiasticalData,
         },
       };
-
       await this.membersModel.findByIdAndUpdate(id, {
         $set: updatedMemberData,
       });
-
-      if (updateMemberDto.ecclesiasticalData.congregation) {
-        await this.addMemberToCongregation(
-          updateMemberDto.ecclesiasticalData.congregation,
-          member,
-        );
-      }
-      if (updateMemberDto.ecclesiasticalData.department) {
-        await this.addMemberToDepartment(
-          updateMemberDto.ecclesiasticalData.department,
-          member,
-        );
-      }
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);

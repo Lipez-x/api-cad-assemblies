@@ -67,4 +67,26 @@ export class DepartmentsService {
       throw new RpcException(error.message);
     }
   }
+
+  async addMember(id: string, memberId: string) {
+    try {
+      await this.departmentsModel.findByIdAndUpdate(id, {
+        $push: { members: memberId },
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
+  }
+
+  async removeMember(id: string, memberId: string) {
+    try {
+      await this.departmentsModel.findByIdAndUpdate(id, {
+        $pull: { members: memberId },
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
+  }
 }

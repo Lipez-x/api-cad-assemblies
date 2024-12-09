@@ -103,4 +103,46 @@ export class CongregationsController {
       }
     }
   }
+
+  @EventPattern('add-congregation-member')
+  async addMember(
+    @Ctx() context: RmqContext,
+    @Payload() { id, memberId }: { id: string; memberId: string },
+  ) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    try {
+      this.congregationsService.addMember(id, memberId);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
+
+  @EventPattern('remove-congregation-member')
+  async removeMember(
+    @Ctx() context: RmqContext,
+    @Payload() { id, memberId }: { id: string; memberId: string },
+  ) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    try {
+      this.congregationsService.removeMember(id, memberId);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
 }

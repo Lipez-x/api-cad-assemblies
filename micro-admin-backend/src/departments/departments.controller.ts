@@ -99,4 +99,46 @@ export class DepartmentsController {
       }
     }
   }
+
+  @EventPattern('add-department-member')
+  async addMember(
+    @Ctx() context: RmqContext,
+    @Payload() { id, memberId }: { id: string; memberId: string },
+  ) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    try {
+      this.departmentsService.addMember(id, memberId);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
+
+  @EventPattern('remove-department-member')
+  async removeMember(
+    @Ctx() context: RmqContext,
+    @Payload() { id, memberId }: { id: string; memberId: string },
+  ) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    try {
+      this.departmentsService.removeMember(id, memberId);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
 }
