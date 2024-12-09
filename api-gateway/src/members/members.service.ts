@@ -23,6 +23,26 @@ export class MembersService {
 
   private logger = new Logger(MembersService.name);
 
+  async baptismHolySpirit(id: string, baptismHolySpiritDate: Date) {
+    const member = await lastValueFrom(
+      this.clientMembers.send('get-members', id ? id : ''),
+    );
+
+    if (!member) {
+      throw new NotFoundException('Member not found');
+    }
+
+    try {
+      this.clientMembers.emit('baptism-holy-spirit', {
+        id,
+        baptismHolySpiritDate,
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async createMember(createMemberDto: CreateMemberDto) {
     const { congregation, department } = createMemberDto.ecclesiasticalData;
 

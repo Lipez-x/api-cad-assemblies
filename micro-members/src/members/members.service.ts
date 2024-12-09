@@ -6,9 +6,6 @@ import { CreateMemberPayload } from './interfaces/create-member-payload.interfac
 import { UpdateMemberPayload } from './interfaces/update-member.payload';
 import { RpcException } from '@nestjs/microservices';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
-import { lastValueFrom } from 'rxjs';
-import { Congregation } from './interfaces/congregation.interface';
-import { Department } from './interfaces/department.interface';
 
 @Injectable()
 export class MembersService {
@@ -44,6 +41,19 @@ export class MembersService {
       id: congregation,
       memberId: member._id,
     });
+  }
+
+  async baptismHolySpirit(id: string, baptismHolySpiritDate: Date) {
+    try {
+      const member = await this.membersModel.findById(id);
+      member.ecclesiasticalData.baptizedHolySpirit = true;
+      member.ecclesiasticalData.baptizedHolySpiritDate = baptismHolySpiritDate;
+
+      await this.membersModel.findByIdAndUpdate(id, { $set: member });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
 
   async createMember(createMemberPayload: CreateMemberPayload) {

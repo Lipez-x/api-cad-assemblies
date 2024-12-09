@@ -18,6 +18,30 @@ export class MembersController {
 
   private logger = new Logger(MembersController.name);
 
+  @EventPattern('baptism-holy-spirit')
+  async baptismHolySpirit(
+    @Ctx() context: RmqContext,
+    @Payload()
+    { id, baptismHolySpiritDate }: { id: string; baptismHolySpiritDate: Date },
+  ) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+
+    try {
+      await this.membersService.baptismHolySpirit(id, baptismHolySpiritDate);
+      await channel.ack(message);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
+
   @EventPattern('create-member')
   async createMember(
     @Ctx() context: RmqContext,

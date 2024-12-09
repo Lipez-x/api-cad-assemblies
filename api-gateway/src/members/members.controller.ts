@@ -16,6 +16,7 @@ import { CreateMemberDto } from './dtos/create-member.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/users/enums/user-role.enum';
 import { UpdateMemberDto } from './dtos/update-member.dto';
+import { BaptismHolySpiritDto } from './dtos/baptism-holy-spirit.dto';
 
 @Roles(UserRole.ADMIN, UserRole.COLLABORATOR)
 @Controller('api/v1/members')
@@ -23,6 +24,16 @@ export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
   private logger = new Logger(MembersController.name);
+
+  @Put('/baptism-holy-spirit/:id')
+  @UsePipes(ValidationPipe)
+  async baptismHolySpirit(
+    @Param('id') id: string,
+    @Body() baptismHolyEspiritDto: BaptismHolySpiritDto,
+  ) {
+    this.logger.log(`Date: ${baptismHolyEspiritDto.date}`);
+    await this.membersService.baptismHolySpirit(id, baptismHolyEspiritDto.date);
+  }
 
   @Post()
   @UsePipes(ValidationPipe)
