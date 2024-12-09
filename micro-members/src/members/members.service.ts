@@ -129,6 +129,18 @@ export class MembersService {
 
   async deleteMember(id: string) {
     try {
+      const member = await this.membersModel.findById(id).exec();
+
+      this.clientAdminBackend.emit('remove-department-member', {
+        id: member.ecclesiasticalData.department,
+        memberId: member._id,
+      });
+
+      this.clientAdminBackend.emit('remove-congregation-member', {
+        id: member.ecclesiasticalData.congregation,
+        memberId: member._id,
+      });
+
       await this.membersModel.findByIdAndDelete(id);
     } catch (error) {
       this.logger.error(error.message);
