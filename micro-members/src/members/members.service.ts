@@ -6,8 +6,6 @@ import { CreateMemberPayload } from './interfaces/create-member-payload.interfac
 import { UpdateMemberPayload } from './interfaces/update-member.payload';
 import { RpcException } from '@nestjs/microservices';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
-import { EcclesiasticalData } from './schemas/ecclesiastical-data.schema';
-import e from 'express';
 
 @Injectable()
 export class MembersService {

@@ -5,6 +5,7 @@ import { MembersModule } from './members/members.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProxyrmqModule } from './proxyrmq/proxyrmq.module';
+import { HistoryModule } from './history/history.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProxyrmqModule } from './proxyrmq/proxyrmq.module';
     ),
     MembersModule,
     ProxyrmqModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
