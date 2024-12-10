@@ -6,6 +6,8 @@ import { CreateMemberPayload } from './interfaces/create-member-payload.interfac
 import { UpdateMemberPayload } from './interfaces/update-member.payload';
 import { RpcException } from '@nestjs/microservices';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
+import { EcclesiasticalData } from './schemas/ecclesiastical-data.schema';
+import e from 'express';
 
 @Injectable()
 export class MembersService {
@@ -98,39 +100,28 @@ export class MembersService {
     try {
       const { id, updateMemberDto } = updateMemberPayload;
 
+      const { ecclesiasticalData, ...memberData } = updateMemberDto;
+
       const member = await this.membersModel.findById(id);
 
-      if (updateMemberDto.ecclesiasticalData.congregation) {
+      if (ecclesiasticalData && ecclesiasticalData.congregation) {
         await this.addMemberToCongregation(
-          updateMemberDto.ecclesiasticalData.congregation,
+          ecclesiasticalData.congregation,
           member,
         );
-
-        member.ecclesiasticalData.congregation =
-          updateMemberDto.ecclesiasticalData.congregation;
       }
 
-      if (updateMemberDto.ecclesiasticalData.department) {
-        await this.addMemberToDepartment(
-          updateMemberDto.ecclesiasticalData.department,
-          member,
-        );
-
-        member.ecclesiasticalData.department =
-          updateMemberDto.ecclesiasticalData.department;
+      if (ecclesiasticalData && ecclesiasticalData.department) {
+        await this.addMemberToDepartment(ecclesiasticalData.department, member);
       }
 
-      const updatedMemberData = {
-        ...member,
-        ...updateMemberDto,
-        ecclesiasticalData: {
-          ...member.ecclesiasticalData,
-          ...updateMemberDto.ecclesiasticalData,
-        },
+      Object.assign(member, memberData);
+      member.ecclesiasticalData = {
+        ...member.ecclesiasticalData,
+        ...ecclesiasticalData,
       };
-      await this.membersModel.findByIdAndUpdate(id, {
-        $set: updatedMemberData,
-      });
+
+      await member.save();
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
