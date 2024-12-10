@@ -11,7 +11,6 @@ import { CongregationModule } from './congregation/congregation.module';
 import { DepartmentModule } from './department/department.module';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { MembersModule } from './members/members.module';
-import { HistoryModule } from './history/history.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { HistoryModule } from './history/history.module';
     CongregationModule,
     DepartmentModule,
     MembersModule,
-    HistoryModule,
   ],
   controllers: [AppController],
   providers: [
