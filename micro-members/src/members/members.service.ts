@@ -6,14 +6,14 @@ import { CreateMemberPayload } from './interfaces/create-member-payload.interfac
 import { UpdateMemberPayload } from './interfaces/update-member.payload';
 import { RpcException } from '@nestjs/microservices';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
-import { EcclesiasticalData } from './schemas/ecclesiastical-data.schema';
-import e from 'express';
+import { HistoryService } from 'src/history/history.service';
 
 @Injectable()
 export class MembersService {
   constructor(
     @InjectModel('Members') private readonly membersModel: Model<Members>,
     private readonly clientProxyCadAssemblies: ClientProxyCadAssemblies,
+    private readonly historyService: HistoryService,
   ) {}
 
   private clientAdminBackend =
@@ -71,6 +71,11 @@ export class MembersService {
       if (department) {
         await this.addMemberToDepartment(department, createdMember);
       }
+
+      await this.historyService.generatingHistory({
+        member: createdMember.id,
+        position: createdMember.ecclesiasticalData.position,
+      });
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
@@ -113,6 +118,13 @@ export class MembersService {
 
       if (ecclesiasticalData && ecclesiasticalData.department) {
         await this.addMemberToDepartment(ecclesiasticalData.department, member);
+      }
+
+      if (ecclesiasticalData.position) {
+        await this.historyService.updateHistory({
+          member: member.id,
+          position: ecclesiasticalData.position,
+        });
       }
 
       Object.assign(member, memberData);

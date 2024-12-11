@@ -8,6 +8,7 @@ import { UpdateMemberDto } from './dtos/update-member.dto';
 import { CreateMemberDto } from './dtos/create-member.dto';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { lastValueFrom } from 'rxjs';
+import { Position } from 'src/common/interfaces/position.dto';
 
 @Injectable()
 export class MembersService {
@@ -22,6 +23,42 @@ export class MembersService {
     this.clientProxyCadAssemblies.getClientProxyAdminBackendInstance();
 
   private logger = new Logger(MembersService.name);
+
+  async getHistory(member: string) {
+    const memberExists = await lastValueFrom(
+      this.clientMembers.send('get-members', member ? member : ''),
+    );
+
+    if (!memberExists) {
+      throw new NotFoundException('Member not found');
+    }
+
+    try {
+      return await lastValueFrom(
+        this.clientMembers.send('get-history', member),
+      );
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async addPosition(member: string, position: Position) {
+    const existsMember = await lastValueFrom(
+      this.clientMembers.send('get-members', member ? member : ''),
+    );
+
+    if (!existsMember) {
+      throw new NotFoundException('Member not found');
+    }
+
+    try {
+      this.clientMembers.emit('add-position', { member, position });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
 
   async baptismHolySpirit(id: string, baptismHolySpiritDate: Date) {
     const member = await lastValueFrom(

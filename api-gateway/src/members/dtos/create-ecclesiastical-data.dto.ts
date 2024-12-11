@@ -6,9 +6,11 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { Position } from '../../common/interfaces/position.dto';
 import { ReceivingType } from '../enums/receiving-type';
+import { Type } from 'class-transformer';
 
 export class CreateEcclesiasticalDataDto {
   @IsObject()
