@@ -4,7 +4,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { RpcException } from '@nestjs/microservices';
 import { GeneratingHistoryPayload } from './interfaces/generating-history.payload';
-import { Position } from 'src/members/interfaces/position.dto';
 
 @Injectable()
 export class HistoryService {
@@ -71,6 +70,15 @@ export class HistoryService {
         { member },
         { currentPosition: position, $push: { positions: position } },
       );
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
+  }
+
+  async deleteHistory(member: string) {
+    try {
+      await this.historyModel.deleteOne({ member });
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);

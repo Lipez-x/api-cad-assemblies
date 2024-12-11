@@ -64,6 +64,7 @@ export class MembersService {
         createMemberPayload.ecclesiasticalData;
 
       const createdMember = new this.membersModel(createMemberPayload);
+
       await createdMember.save();
 
       await this.addMemberToCongregation(congregation, createdMember);
@@ -153,6 +154,8 @@ export class MembersService {
         id: member.ecclesiasticalData.congregation,
         memberId: member._id,
       });
+
+      await this.historyService.deleteHistory(member.id);
 
       await this.membersModel.findByIdAndDelete(id);
     } catch (error) {
