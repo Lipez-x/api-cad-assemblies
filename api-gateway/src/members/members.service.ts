@@ -23,6 +23,25 @@ export class MembersService {
 
   private logger = new Logger(MembersService.name);
 
+  async getHistory(member: string) {
+    const memberExists = await lastValueFrom(
+      this.clientMembers.send('get-members', member ? member : ''),
+    );
+
+    if (!memberExists) {
+      throw new NotFoundException('Member not found');
+    }
+
+    try {
+      return await lastValueFrom(
+        this.clientMembers.send('get-history', member),
+      );
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
   async baptismHolySpirit(id: string, baptismHolySpiritDate: Date) {
     const member = await lastValueFrom(
       this.clientMembers.send('get-members', id ? id : ''),

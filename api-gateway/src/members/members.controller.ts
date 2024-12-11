@@ -25,6 +25,11 @@ export class MembersController {
 
   private logger = new Logger(MembersController.name);
 
+  @Get('/history/:id')
+  async getHistory(@Param('id') member: string) {
+    return await this.membersService.getHistory(member);
+  }
+
   @Put('/baptism-holy-spirit/:id')
   @UsePipes(ValidationPipe)
   async baptismHolySpirit(

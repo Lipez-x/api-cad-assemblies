@@ -30,6 +30,25 @@ export class HistoryService {
     }
   }
 
+  async getHistory(member: string) {
+    try {
+      const history = await this.historyModel
+        .findOne({ member })
+        .select('-_id')
+        .populate('member', 'name')
+        .exec();
+
+      history.positions.sort(
+        (a, b) => b.startDate.getTime() - a.startDate.getTime(),
+      );
+
+      return history;
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
+  }
+
   async updateHistory(updateHistoryPayload: GeneratingHistoryPayload) {
     try {
       const { member, position } = updateHistoryPayload;

@@ -4,7 +4,7 @@ import { Position } from '../interfaces/position.dto';
 
 @Schema({ _id: false })
 export class EcclesiasticalData {
-  @Prop()
+  @Prop({ type: Position })
   position: Position;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Departments' })
