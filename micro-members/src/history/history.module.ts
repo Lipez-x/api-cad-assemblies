@@ -12,5 +12,6 @@ import { ProxyrmqModule } from 'src/proxyrmq/proxyrmq.module';
   ],
   controllers: [HistoryController],
   providers: [HistoryService],
+  exports: [HistoryService],
 })
 export class HistoryModule {}
