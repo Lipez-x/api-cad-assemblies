@@ -8,6 +8,7 @@ import { UpdateMemberDto } from './dtos/update-member.dto';
 import { CreateMemberDto } from './dtos/create-member.dto';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { lastValueFrom } from 'rxjs';
+import { Position } from 'src/common/interfaces/position.dto';
 
 @Injectable()
 export class MembersService {
@@ -36,6 +37,23 @@ export class MembersService {
       return await lastValueFrom(
         this.clientMembers.send('get-history', member),
       );
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async addPosition(member: string, position: Position) {
+    const existsMember = await lastValueFrom(
+      this.clientMembers.send('get-members', member ? member : ''),
+    );
+
+    if (!existsMember) {
+      throw new NotFoundException('Member not found');
+    }
+
+    try {
+      this.clientMembers.emit('add-position', { member, position });
     } catch (error) {
       this.logger.error(error.message);
       throw new InternalServerErrorException(error.message);

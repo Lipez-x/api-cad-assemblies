@@ -17,6 +17,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/users/enums/user-role.enum';
 import { UpdateMemberDto } from './dtos/update-member.dto';
 import { BaptismHolySpiritDto } from './dtos/baptism-holy-spirit.dto';
+import { Position } from 'src/common/interfaces/position.dto';
 
 @Roles(UserRole.ADMIN, UserRole.COLLABORATOR)
 @Controller('api/v1/members')
@@ -28,6 +29,11 @@ export class MembersController {
   @Get('/history/:id')
   async getHistory(@Param('id') member: string) {
     return await this.membersService.getHistory(member);
+  }
+
+  @Put('/history/:id')
+  async addPosition(@Param('id') member: string, @Body() position: Position) {
+    return await this.membersService.addPosition(member, position);
   }
 
   @Put('/baptism-holy-spirit/:id')
