@@ -120,6 +120,13 @@ export class MembersService {
         await this.addMemberToDepartment(ecclesiasticalData.department, member);
       }
 
+      if (ecclesiasticalData.position) {
+        await this.historyService.updateHistory({
+          member: member.id,
+          position: ecclesiasticalData.position,
+        });
+      }
+
       Object.assign(member, memberData);
       member.ecclesiasticalData = {
         ...member.ecclesiasticalData,
