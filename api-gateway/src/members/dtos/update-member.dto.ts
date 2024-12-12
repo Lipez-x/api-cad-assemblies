@@ -16,46 +16,50 @@ import { Type } from 'class-transformer';
 export class UpdateMemberDto {
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string;
 
   @IsNotEmpty()
   @IsOptional()
-  address: Address;
+  address?: Address;
 
   @IsString()
   @IsOptional()
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @IsString()
   @IsOptional()
-  scholarity: string;
+  scholarity?: string;
 
   @IsString()
   @IsOptional()
-  profession: string;
+  profession?: string;
 
   @IsEnum(CivilStatus)
   @IsOptional()
-  civilStatus: string;
+  civilStatus?: string;
 
   @IsString()
   @IsOptional()
-  spouseName: string;
+  spouseName?: string;
 
   @IsString()
   @IsOptional()
-  motherName: string;
+  motherName?: string;
 
   @IsString()
   @IsOptional()
-  fatherName: string;
+  fatherName?: string;
 
   @IsDateString()
   @IsOptional()
-  weddingDate: Date;
+  weddingDate?: Date;
+
+  @IsString()
+  @IsOptional()
+  urlImage?: string;
 
   @ValidateNested()
   @Type(() => UpdateEcclesiasticalDataDto)
   @IsOptional()
-  ecclesiasticalData: UpdateEcclesiasticalDataDto;
+  ecclesiasticalData?: UpdateEcclesiasticalDataDto;
 }

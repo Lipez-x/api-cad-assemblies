@@ -110,22 +110,27 @@ export class MembersService {
 
       const member = await this.membersModel.findById(id);
 
-      if (ecclesiasticalData && ecclesiasticalData.congregation) {
-        await this.addMemberToCongregation(
-          ecclesiasticalData.congregation,
-          member,
-        );
-      }
+      if (ecclesiasticalData) {
+        if (ecclesiasticalData.congregation) {
+          await this.addMemberToCongregation(
+            ecclesiasticalData.congregation,
+            member,
+          );
+        }
 
-      if (ecclesiasticalData && ecclesiasticalData.department) {
-        await this.addMemberToDepartment(ecclesiasticalData.department, member);
-      }
+        if (ecclesiasticalData.department) {
+          await this.addMemberToDepartment(
+            ecclesiasticalData.department,
+            member,
+          );
+        }
 
-      if (ecclesiasticalData.position) {
-        await this.historyService.updateHistory({
-          member: member.id,
-          position: ecclesiasticalData.position,
-        });
+        if (ecclesiasticalData.position) {
+          await this.historyService.updateHistory({
+            member: member.id,
+            position: ecclesiasticalData.position,
+          });
+        }
       }
 
       Object.assign(member, memberData);

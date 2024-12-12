@@ -57,6 +57,9 @@ export class Members extends Document {
   @Prop({ required: true })
   status: string;
 
+  @Prop()
+  urlImage: string;
+
   @Prop({ type: EcclesiasticalDataSchema, required: true })
   ecclesiasticalData: EcclesiasticalData;
 }
