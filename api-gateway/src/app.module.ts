@@ -11,6 +11,7 @@ import { CongregationModule } from './congregation/congregation.module';
 import { DepartmentModule } from './department/department.module';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { MembersModule } from './members/members.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MembersModule } from './members/members.module';
     CongregationModule,
     DepartmentModule,
     MembersModule,
+    AwsModule,
   ],
   controllers: [AppController],
   providers: [
