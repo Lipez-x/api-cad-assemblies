@@ -18,7 +18,9 @@ export class AwsS3Service {
         },
       });
 
-      const fileExtension = file.originalName.split('.').pop();
+      console.log(file);
+
+      const fileExtension = file.originalname.split('.').pop();
 
       const urlKey = `${id}.${fileExtension}`;
 

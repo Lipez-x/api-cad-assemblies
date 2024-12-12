@@ -8,6 +8,8 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,6 +20,7 @@ import { UserRole } from 'src/users/enums/user-role.enum';
 import { UpdateMemberDto } from './dtos/update-member.dto';
 import { BaptismHolySpiritDto } from './dtos/baptism-holy-spirit.dto';
 import { Position } from 'src/common/interfaces/position.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Roles(UserRole.ADMIN, UserRole.COLLABORATOR)
 @Controller('api/v1/members')
@@ -34,6 +37,12 @@ export class MembersController {
   @Put('/history/:id')
   async addPosition(@Param('id') member: string, @Body() position: Position) {
     return await this.membersService.addPosition(member, position);
+  }
+
+  @Post('/upload/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(@UploadedFile() file: any, @Param('id') id: string) {
+    return await this.membersService.uploadImage(file, id);
   }
 
   @Put('/baptism-holy-spirit/:id')

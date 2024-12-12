@@ -9,11 +9,13 @@ import { CreateMemberDto } from './dtos/create-member.dto';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { lastValueFrom } from 'rxjs';
 import { Position } from 'src/common/interfaces/position.dto';
+import { AwsS3Service } from 'src/aws/aws-s3.service';
 
 @Injectable()
 export class MembersService {
   constructor(
     private readonly clientProxyCadAssemblies: ClientProxyCadAssemblies,
+    private readonly awsS3Service: AwsS3Service,
   ) {}
 
   private clientMembers =
@@ -58,6 +60,29 @@ export class MembersService {
       this.logger.error(error.message);
       throw new InternalServerErrorException(error.message);
     }
+  }
+
+  async uploadImage(file: any, id: string) {
+    const member = await lastValueFrom(
+      this.clientMembers.send('get-members', id),
+    );
+
+    if (!member) {
+      throw new NotFoundException('Member not found');
+    }
+    const urlImagePlayer = await this.awsS3Service.uploadFile(file, id);
+
+    const updateMemberDto: UpdateMemberDto = {};
+    updateMemberDto.urlImage = urlImagePlayer.url;
+
+    await lastValueFrom(
+      this.clientMembers.emit('update-member', {
+        id,
+        updateMemberDto,
+      }),
+    );
+
+    return await lastValueFrom(this.clientMembers.send('get-members', id));
   }
 
   async baptismHolySpirit(id: string, baptismHolySpiritDate: Date) {

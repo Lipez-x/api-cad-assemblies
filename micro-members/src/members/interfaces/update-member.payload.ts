@@ -14,6 +14,7 @@ export interface UpdateMemberPayload {
     motherName: string;
     fatherName: string;
     weddingDate: Date;
+    urlImage: string;
     ecclesiasticalData: EcclesiasticalData;
   };
 }
