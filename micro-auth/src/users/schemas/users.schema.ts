@@ -10,6 +10,8 @@ export class Users extends Document {
   role: UserRole;
   @Prop({ isRequired: true })
   password: string;
+  @Prop()
+  recoveryCode?: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);
