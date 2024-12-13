@@ -3,6 +3,7 @@ import {
   Controller,
   Logger,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -22,5 +23,11 @@ export class UsersController {
   async register(@Body() registerUserDto: RegisterUserDto) {
     this.logger.log(`User: ${JSON.stringify(registerUserDto)}`);
     return this.usersService.register(registerUserDto);
+  }
+
+  @IsPublic()
+  @Post('forgot-password')
+  async forgotPassword(@Query('email') email: string) {
+    await this.usersService.forgotPassword(email);
   }
 }

@@ -51,4 +51,24 @@ export class UsersController {
       await channel.ack(message);
     }
   }
+
+  @EventPattern('forgot-password')
+  async forgotPassword(@Ctx() context: RmqContext, @Payload() email: string) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+
+    try {
+      await this.usersService.sendCodeToForgotPassword(email);
+      await channel.ack(message);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
 }

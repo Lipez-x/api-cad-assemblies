@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { RegisterUserDto } from './dtos/register-user.dto';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -26,6 +27,15 @@ export class UsersService {
 
     try {
       this.clientAuth.emit('register-user', registerUserDto);
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async forgotPassword(email: string) {
+    this.clientAuth.emit('forgot-password', email);
+    try {
     } catch (error) {
       this.logger.error(error.message);
       throw new InternalServerErrorException(error.message);

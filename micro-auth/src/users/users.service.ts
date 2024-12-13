@@ -5,7 +5,8 @@ import { Model } from 'mongoose';
 import { Users } from './schemas/users.schema';
 import * as bcrypt from 'bcrypt';
 import { RpcException } from '@nestjs/microservices';
-import { verify } from 'crypto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { randomInt } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +14,7 @@ export class UsersService {
 
   constructor(
     @InjectModel('Users') private readonly usersModel: Model<Users>,
+    private readonly mailService: MailerService,
   ) {}
 
   async register(registerUserPayload: RegisterUserPayload) {
@@ -37,5 +39,22 @@ export class UsersService {
 
   async getUserByEmail(email: string) {
     return await this.usersModel.findOne({ email });
+  }
+
+  async sendCodeToForgotPassword(email: string) {
+    try {
+      const user = await this.usersModel.findOne({ email });
+      user.recoveryCode = randomInt(100000, 1000000).toString();
+      await user.save();
+      this.mailService.sendMail({
+        to: email,
+        from: 'CAD ASSEMBLIES <ifelipelima.dev@gmail.com>',
+        subject: 'Code to recovery account',
+        text: `Code to recovery Account: ${user.recoveryCode}`,
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
   }
 }
