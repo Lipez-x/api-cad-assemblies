@@ -3,6 +3,7 @@ import {
   Controller,
   Logger,
   Post,
+  Put,
   Query,
   UsePipes,
   ValidationPipe,
@@ -10,6 +11,7 @@ import {
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { UsersService } from './users.service';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
+import { ConfirmPasswordDto } from './dtos/confirm-password.dto';
 
 @Controller('api/v1/users')
 export class UsersController {
@@ -27,7 +29,14 @@ export class UsersController {
 
   @IsPublic()
   @Post('forgot-password')
-  async forgotPassword(@Query('email') email: string) {
+  async forgotPassword(@Body() { email }: { email: string }) {
     await this.usersService.forgotPassword(email);
+  }
+
+  @IsPublic()
+  @Post('confirm-password')
+  @UsePipes(ValidationPipe)
+  async confirmPassword(@Body() confirmPasswordDto: ConfirmPasswordDto) {
+    await this.usersService.confirmPassword(confirmPasswordDto);
   }
 }

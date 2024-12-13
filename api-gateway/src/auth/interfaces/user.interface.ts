@@ -6,4 +6,5 @@ export interface User {
   email: string;
   role: UserRole;
   password: string;
+  recoveryCode: string;
 }

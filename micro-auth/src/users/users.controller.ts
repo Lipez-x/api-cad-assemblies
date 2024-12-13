@@ -1,4 +1,4 @@
-import { Controller, Logger } from '@nestjs/common';
+import { Body, Controller, Logger } from '@nestjs/common';
 import {
   Ctx,
   EventPattern,
@@ -8,6 +8,7 @@ import {
 } from '@nestjs/microservices';
 import { RegisterUserPayload } from './interfaces/register-user.payload';
 import { UsersService } from './users.service';
+import { ConfirmPasswordPayload } from './interfaces/confirm-password.payload';
 
 const ackErrors: string[] = ['E11000', 'Cast to ObjectId'];
 
@@ -59,6 +60,29 @@ export class UsersController {
 
     try {
       await this.usersService.sendCodeToForgotPassword(email);
+      await channel.ack(message);
+    } catch (error) {
+      this.logger.error(error.message);
+      const filterAckError = ackErrors.filter((ackError) =>
+        error.message.includes(ackError),
+      );
+
+      if (filterAckError) {
+        await channel.ack(message);
+      }
+    }
+  }
+
+  @EventPattern('confirm-password')
+  async confirmPassword(
+    @Ctx() context: RmqContext,
+    @Payload() confirmPasswordPayload: ConfirmPasswordPayload,
+  ) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+
+    try {
+      await this.usersService.confirmPassword(confirmPasswordPayload);
       await channel.ack(message);
     } catch (error) {
       this.logger.error(error.message);

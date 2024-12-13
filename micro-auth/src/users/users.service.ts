@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { RpcException } from '@nestjs/microservices';
 import { MailerService } from '@nestjs-modules/mailer';
 import { randomInt } from 'crypto';
+import { ConfirmPasswordPayload } from './interfaces/confirm-password.payload';
 
 @Injectable()
 export class UsersService {
@@ -52,6 +53,22 @@ export class UsersService {
         subject: 'Code to recovery account',
         text: `Code to recovery Account: ${user.recoveryCode}`,
       });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new RpcException(error.message);
+    }
+  }
+
+  async confirmPassword(confirmPasswordPayload: ConfirmPasswordPayload) {
+    const { email, newPassword } = confirmPasswordPayload;
+    try {
+      const user = await this.usersModel.findOne({ email });
+
+      user.recoveryCode = null;
+      const salt = await bcrypt.genSalt(16);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+      await user.$set({ password: hashedPassword }).save();
     } catch (error) {
       this.logger.error(error.message);
       throw new RpcException(error.message);
