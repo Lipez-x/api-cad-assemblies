@@ -15,7 +15,7 @@ async function bootstrap() {
       'O Cad Assemblies foi idealizado com o intuito de gerenciar membros, departamentos e congregações de igrejas, facilitando um processo que na maioria das igrejas ainda é feito de forma manual.',
     )
     .setVersion('1.0')
-    .addTag('users')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
