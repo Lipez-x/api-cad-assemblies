@@ -6,9 +6,4 @@ import { User } from './auth/interfaces/user.interface';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
-  @Get('me')
-  getUserByJwt(@CurrentUser() user: User) {
-    return user;
-  }
 }

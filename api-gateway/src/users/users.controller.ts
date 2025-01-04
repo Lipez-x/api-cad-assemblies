@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Logger,
   Post,
   UsePipes,
@@ -10,12 +11,33 @@ import { RegisterUserDto } from './dtos/register-user.dto';
 import { UsersService } from './users.service';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
 import { ConfirmPasswordDto } from './dtos/confirm-password.dto';
-import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { User } from 'src/auth/interfaces/user.interface';
 @Controller('api/v1/users')
 export class UsersController {
   private logger = new Logger(UsersController.name);
 
   constructor(private readonly usersService: UsersService) {}
+
+  /**
+   * Pegar dados do usuário logado
+   * @remarks Pegar os dados do usuário com base no token JWT fornecido.
+   * @throws {500} Erro interno do servidor
+   */
+  @ApiResponse({
+    status: 200,
+    description: 'Dados do usuário retornados com sucesso',
+    example: {
+      _id: '674f010b53e44dd1e502d7c5',
+      email: 'cadassemblies@email.com',
+      role: 'ADMIN',
+    },
+  })
+  @Get('me')
+  async getUserByJwt(@CurrentUser() user: User): Promise<User> {
+    return user;
+  }
 
   /**
    * Criar novo usuário
@@ -67,6 +89,7 @@ export class UsersController {
    * @throws {201} Mensagem para modificar senha enviada
    * @throws {404} Usuário não encontrado
    * @throws {401} Código inválido
+   * @throws {500} Erro interno do servidor
    */
   @IsPublic()
   @Post('confirm-password')
