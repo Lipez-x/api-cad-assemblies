@@ -1,17 +1,30 @@
 import { IsObject, IsOptional, IsString } from 'class-validator';
 
-class Address {
+export class Address {
   street: string;
-  number: string | number;
+  number: string;
   neighborhood: string;
 }
-export class updateCongregationDto {
+
+export class UpdateCongregationDto {
+  /**
+   * Nome da congregação
+   * @example 'Cedro'
+   */
   @IsString()
   @IsOptional()
   name: string;
+  /**
+   * Nome do dirigente da congregação
+   * @example 'Pb. Paulo'
+   */
   @IsString()
   @IsOptional()
   leader: string;
+  /**
+   * Endereço da congregação
+   * @example { street: 'Rua um', number: '321', neighborhood: 'Cedro' }
+   */
   @IsObject()
   @IsOptional()
   address: Address;

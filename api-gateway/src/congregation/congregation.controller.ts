@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { CongregationService } from './congregation.service';
 import { CreateCongregationDto } from './dtos/create-congregation.dto';
-import { updateCongregationDto } from './dtos/update-congregation.dto';
+import { UpdateCongregationDto } from './dtos/update-congregation.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/users/enums/user-role.enum';
 
@@ -43,7 +43,7 @@ export class CongregationController {
   @UsePipes(ValidationPipe)
   async updateCongregation(
     @Param('id') id: string,
-    @Body() updateCongregationDto: updateCongregationDto,
+    @Body() updateCongregationDto: UpdateCongregationDto,
   ) {
     this.logger.log(
       `Congregation: ${id}, update body: ${JSON.stringify(updateCongregationDto)}`,

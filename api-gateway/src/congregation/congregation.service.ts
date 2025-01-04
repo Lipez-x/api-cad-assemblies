@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ClientProxyCadAssemblies } from 'src/proxyrmq/client-proxy';
 import { CreateCongregationDto } from './dtos/create-congregation.dto';
-import { updateCongregationDto } from './dtos/update-congregation.dto';
+import { UpdateCongregationDto } from './dtos/update-congregation.dto';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
@@ -52,7 +52,7 @@ export class CongregationService {
 
   async updateCongregation(
     id: string,
-    updateCongregationDto: updateCongregationDto,
+    updateCongregationDto: UpdateCongregationDto,
   ) {
     const congregation = await lastValueFrom(
       this.clientAdminBackend.send('get-congregations', id),
