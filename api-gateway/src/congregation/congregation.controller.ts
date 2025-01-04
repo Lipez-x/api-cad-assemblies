@@ -29,7 +29,7 @@ export class CongregationController {
   /**
    * Criar congregação
    * @remarks Envia ao microservice a mensagem para adicionar a congregação
-   * @throws {201} Mensagem para adicionar congregação enviada
+   * @throws {201} Mensagem para adicionar congregação enviada com sucesso
    * @throws {500} Erro interno do servidor
    */
   @Post()
