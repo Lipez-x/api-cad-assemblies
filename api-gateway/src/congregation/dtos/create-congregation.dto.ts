@@ -16,7 +16,6 @@ export class CreateCongregationDto {
   leader: string;
   /**
    * Endereço da congregação
-   * @example { street: 'Rua dois', number: '123', neighborhood: 'Cedro' }
    */
   @IsObject()
   address: Address;

@@ -1,8 +1,17 @@
 import { IsObject, IsOptional, IsString } from 'class-validator';
 
 export class Address {
+  /**
+   * @example 'Rua dois'
+   */
   street: string;
+  /**
+   * @example '123'
+   */
   number: string;
+  /**
+   * @example 'Cedro'
+   */
   neighborhood: string;
 }
 
@@ -13,19 +22,18 @@ export class UpdateCongregationDto {
    */
   @IsString()
   @IsOptional()
-  name: string;
+  name?: string;
   /**
    * Nome do dirigente da congregação
    * @example 'Pb. Paulo'
    */
   @IsString()
   @IsOptional()
-  leader: string;
+  leader?: string;
   /**
    * Endereço da congregação
-   * @example { street: 'Rua um', number: '321', neighborhood: 'Cedro' }
    */
   @IsObject()
   @IsOptional()
-  address: Address;
+  address?: Address;
 }
