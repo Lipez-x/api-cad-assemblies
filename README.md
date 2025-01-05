@@ -7,10 +7,10 @@ Esta API foi criada para simplificar e otimizar o gerenciamento de membros, depa
 
 ## Estrutura do Projeto
 
-A aplicação é dividida nos seguintes microsserviçoss:
+A aplicação é dividida nos seguintes microsserviços:
 
 1. **API Gateway**
-   - Centraliza as requisições HTTP e as distribui para os microservices
+   - Centraliza as requisições HTTP e as distribui para os microsserviços
    - Gerencia autenticação e autorização
    - Realiza validação inicial dos dados
 2. **Auth**
@@ -51,7 +51,7 @@ npm install
 
 #### 3. Configurar variáveis de ambiente
 
-Você pode criar um arquivo `.env` e adicionar as variáveis conforme necessário em cada microsserviços e no api-gateway. Aqui está um exemplo de como configurar essas variáveis:
+Você pode criar um arquivo `.env` e adicionar as variáveis conforme necessário em cada microsserviço e no api-gateway. Aqui está um exemplo de como configurar essas variáveis:
 
 ###### .env
 
@@ -62,7 +62,7 @@ RMQ_PASSWORD = rmq_password
 RMQ_ADDRESS = rmq_address
 
 // Configurações de JWT
-JWT_SECRET= jwt_secret
+JWT_SECRET = jwt_secret
 
 // Configurações AWS
 S3_USER_ACCESS_KEY_ID = s3_user_access_key_id
