@@ -1,5 +1,5 @@
 export enum ReceivingType {
-  CONFESSION = 'Profissão de Fé',
-  TRANSFER = 'TRANSFER',
-  ACCLAIM = 'ACCLAIM',
+  CONFESSION = 'PROFISSÃO DA FÉ',
+  TRANSFER = 'TRANFERÊNCIA',
+  ACCLAIM = 'ACLAMAÇÃO',
 }

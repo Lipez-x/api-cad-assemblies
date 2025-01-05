@@ -1,36 +1,45 @@
 import {
-  IsBoolean,
   IsDateString,
-  IsEnum,
   IsNotEmpty,
   IsObject,
   IsOptional,
   IsString,
-  ValidateNested,
 } from 'class-validator';
 import { Position } from '../../common/interfaces/position.dto';
-import { Department } from 'src/common/interfaces/department.interface';
-import { Congregation } from 'src/common/interfaces/congregation.interface';
-import { Type } from 'class-transformer';
 
 export class UpdateEcclesiasticalDataDto {
+  /**
+   * Posição do membro na igreja
+   */
   @IsObject()
   @IsOptional()
-  position: Position;
-
+  position?: Position;
+  /**
+   * ID do departamento que o membro faz parte
+   * @example '6756eba3336d4c10ca51bd70'
+   */
   @IsNotEmpty()
   @IsOptional()
-  department: Department;
-
+  department?: string;
+  /**
+   * Data de batismo
+   * @example '2022-04-01'
+   */
   @IsDateString()
   @IsOptional()
-  baptismDate: Date;
-
+  baptismDate?: Date;
+  /**
+   * ID da congregação que o membro faz parte
+   * @example '6756e541dc556a11d82de861'
+   */
   @IsNotEmpty()
   @IsOptional()
-  congregation: Congregation;
-
+  congregation?: string;
+  /**
+   * Nome do pastor
+   * @example 'Pr. Paulo Oliveira'
+   */
   @IsString()
   @IsOptional()
-  pastorName: string;
+  pastorName?: string;
 }
