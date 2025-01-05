@@ -10,9 +10,9 @@ Esta API foi criada para simplificar e otimizar o gerenciamento de membros, depa
 A aplicação é dividida nos seguintes microsserviçoss:
 
 1. **API Gateway**
-   - Centraliza as requisições HTTP e as distribui para os microservices.
-   - Gerencia autenticação e autorização.
-   - Realiza validação inicial dos dados.
+   - Centraliza as requisições HTTP e as distribui para os microservices
+   - Gerencia autenticação e autorização
+   - Realiza validação inicial dos dados
 2. **Auth**
    - Gerencia o cadastro de usuários
    - Operações de recuperar senha
