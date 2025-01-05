@@ -28,7 +28,7 @@ export class CongregationController {
 
   /**
    * Criar congregação
-   * @remarks Envia ao microservice a mensagem para adicionar a congregação
+   * @remarks Envia ao microservice a mensagem para adicionar a congregação.
    * @throws {201} Mensagem para adicionar congregação enviada com sucesso
    * @throws {500} Erro interno do servidor
    */
@@ -76,7 +76,7 @@ export class CongregationController {
   /**
    *
    * Atualizar congregação
-   * @remarks Envia ao microservice a mensagem para atualizar uma congregação
+   * @remarks Envia ao microservice a mensagem para atualizar uma congregação.
    * @param id
    * @throws {200} Mensagem para atualizar congregação enviada com sucesso
    * @throws {404} Congregação não encontrada
@@ -100,7 +100,7 @@ export class CongregationController {
   /**
    *
    * Deletar congregação
-   * @remarks Envia ao microservice a mensagem para deletar uma congregação
+   * @remarks Envia ao microservice a mensagem para deletar uma congregação.
    * @param id
    * @throws {200} Mensagem para deletar congregação enviada com sucesso
    * @throws {404} Congregação não encontrada

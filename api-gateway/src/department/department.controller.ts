@@ -16,8 +16,9 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/users/enums/user-role.enum';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Roles(UserRole.ADMIN)
 @Controller('api/v1/department')
 export class DepartmentController {
@@ -27,7 +28,7 @@ export class DepartmentController {
 
   /**
    * Criar departamento
-   * @remarks Envia ao microservice a mensagem para adicionar o departamento
+   * @remarks Envia ao microservice a mensagem para adicionar o departamento.
    * @throws {201} Mensagem para adicionar departamento enviada com sucesso
    * @throws {500} Erro interno do servidor
    */
@@ -71,7 +72,7 @@ export class DepartmentController {
   /**
    *
    * Atualizar departamento
-   * @remarks Envia ao microservice a mensagem para atualizar um departamento
+   * @remarks Envia ao microservice a mensagem para atualizar um departamento.
    * @param id
    * @throws {200} Mensagem para atualizar departamento enviada com sucesso
    * @throws {404} Departamento não encontrado
@@ -92,7 +93,7 @@ export class DepartmentController {
   /**
    *
    * Deletar departamento
-   * @remarks Envia ao microservice a mensagem para deletar um departamento
+   * @remarks Envia ao microservice a mensagem para deletar um departamento.
    * @param id
    * @throws {200} Mensagem para deletar departamento enviada com sucesso
    * @throws {404} Departamento não encontrado

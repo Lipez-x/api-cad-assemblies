@@ -11,9 +11,11 @@ import { RegisterUserDto } from './dtos/register-user.dto';
 import { UsersService } from './users.service';
 import { IsPublic } from 'src/common/decorators/is-public.decorator';
 import { ConfirmPasswordDto } from './dtos/confirm-password.dto';
-import { ApiBody, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from 'src/auth/interfaces/user.interface';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from './enums/user-role.enum';
 @Controller('api/v1/users')
 export class UsersController {
   private logger = new Logger(UsersController.name);
@@ -41,12 +43,13 @@ export class UsersController {
 
   /**
    * Criar novo usuário
-   * @remarks Rota para criar um novo usuário, sendo ele Administrador ou Colaborador.
-   * @throws {201} Mensagem para criar usuário enviada
+   * @remarks Envia ao microservice a mensagem para criar o usuário, sendo ele Administrador ou Colaborador.
+   * @throws {201} Mensagem para criar usuário enviada com sucesso
    * @throws {400} A senha não foi confirmada corretamente
    * @throws {500} Erro interno do servidor
    */
-  @IsPublic()
+  @ApiBearerAuth()
+  @Roles(UserRole.ADMIN)
   @Post('/register')
   @UsePipes(ValidationPipe)
   async register(@Body() registerUserDto: RegisterUserDto) {
@@ -57,7 +60,7 @@ export class UsersController {
   /**
    * Esqueceu senha
    * @remarks Operação para enviar um código de recuperação da conta para o email do usuário.
-   * O código será utilizado na operação de confirmar senha para modificar a senha do usuário
+   * O código será utilizado na operação de confirmar senha para modificar a senha do usuário.
    * @throws {201} Código enviado para o email fornecido
    * @throws {404} Usuário não encontrado
    * @throws {500} Erro interno do servidor
@@ -85,8 +88,8 @@ export class UsersController {
 
   /**
    * Confirmar senha
-   * @remarks Operação para modificar senha do usuário com o código de recuperação.
-   * @throws {201} Mensagem para modificar senha enviada
+   * @remarks Envia ao microservice a mensagem para modificar a senha do usuário com o código de recuperação.
+   * @throws {201} Mensagem para modificar senha enviada com sucesso
    * @throws {404} Usuário não encontrado
    * @throws {401} Código inválido
    * @throws {500} Erro interno do servidor
