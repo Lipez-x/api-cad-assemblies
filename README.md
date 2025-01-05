@@ -7,7 +7,7 @@ Esta API foi criada para simplificar e otimizar o gerenciamento de membros, depa
 
 ## Estrutura do Projeto
 
-A aplicação é dividida nos seguintes microserviços:
+A aplicação é dividida nos seguintes microsserviçoss:
 
 1. **API Gateway**
    - Centraliza as requisições HTTP e as distribui para os microservices.
@@ -43,7 +43,7 @@ cd api-cad-assemblies
 
 #### 2. Instale as depêndencias
 
-Navegue até cada pasta de microserviço e no api-gateway e execute:
+Navegue até cada pasta de microsserviços e no api-gateway e execute:
 
 ```bash
 npm install
@@ -51,7 +51,7 @@ npm install
 
 #### 3. Configurar variáveis de ambiente
 
-Você pode criar um arquivo `.env` e adicionar as variáveis conforme necessário em cada microserviço e no api-gateway. Aqui está um exemplo de como configurar essas variáveis:
+Você pode criar um arquivo `.env` e adicionar as variáveis conforme necessário em cada microsserviços e no api-gateway. Aqui está um exemplo de como configurar essas variáveis:
 
 ###### .env
 
